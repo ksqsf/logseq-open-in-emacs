@@ -2,7 +2,7 @@
 
 Open and edit Logseq pages and config files in Emacs.
 
-[Demo video](demo.mp4)
+![Demo](demo.gif)
 
 ## Configuration
 
