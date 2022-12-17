@@ -1,8 +1,8 @@
 {
-  "name": "logseq-open-in-code",
-  "version": "0.0.5",
+  "name": "logseq-open-in-emacs",
+  "version": "0.0.1",
   "main": "dist/index.html",
-  "author": "rebornix",
+  "author": "ksqsf",
   "scripts": {
     "dev": "vite",
     "build": "vite build"
@@ -17,8 +17,8 @@
     "@vitejs/plugin-vue": "2.0.0"
   },
   "logseq": {
-    "id": "logseq-open-in-code",
+    "id": "logseq-open-in-emacs",
     "icon": "./icon.png",
-    "title": "Open in VS Code"
+    "title": "Open in Emacs"
   }
 }

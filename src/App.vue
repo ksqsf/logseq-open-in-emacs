@@ -23,9 +23,9 @@
 
 <script>
 function generateUrl(path) {
-  const { distro } = logseq.settings;
-  const protocol = distro === "stable" ? "vscode" : "vscode-insiders";
-  return `${protocol}://file/` + encodeURIComponent(path) + "?windowId=_blank";
+    let url = `org-protocol://find-file/?path=` + encodeURIComponent(path);
+    // console.log(url);
+    return url;
 }
 
 async function openConfig(name) {
@@ -62,7 +62,7 @@ async function findFile(fileId) {
   }
 }
 
-async function openPageInVSCode() {
+async function openPageInEmacs() {
   const currentPage = await logseq.Editor.getCurrentPage();
   if (currentPage && currentPage.file) {
     const fileId = currentPage.file.id;
@@ -133,7 +133,7 @@ export default {
 
     logseq.on("ui:visible:changed", ({ visible }) => {
       if (visible) {
-        const el = top.document.querySelector(`a#open-in-code-anchor`);
+        const el = top.document.querySelector(`a#open-in-emacs-anchor`);
         const rect = el.getBoundingClientRect();
         this.left = rect.left - 50;
         this.top = rect.top + 30;
@@ -155,7 +155,7 @@ export default {
       !inner && logseq.hideMainUI();
     },
     _onClickOpenCurrentPage() {
-      openPageInVSCode();
+      openPageInEmacs();
     },
     _onClickOpenCurrentGraph() {
       openGraph();

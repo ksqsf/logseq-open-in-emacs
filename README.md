@@ -1,10 +1,44 @@
-## Open Logseq in VS Code
+# Open Logseq in Emacs
 
-Open and edit Logseq pages and config files in VS Code
+Open and edit Logseq pages and config files in Emacs.
 
-![demo](./demo.gif)
+[Demo video](demo.mp4)
 
-### Development
+## Configuration
+
+First, [set up Org-protocol](https://orgmode.org/worg/org-contrib/org-protocol.html).  This is due to the limitations of Logseq and, in general, Electron.
+
+Second, add the following to your config file:
+
+```lisp
+(use-package org-protocol
+  :ensure org
+  :config
+  (add-to-list 'org-protocol-protocol-alist
+               '("org-find-file" :protocol "find-file" :function org-protocol-find-file :kill-client nil))
+  (defun org-protocol-find-file (fname)
+    "Process org-protocol://find-file?path= style URL."
+    (let ((f (plist-get (org-protocol-parse-parameters fname nil '(:path)) :path)))
+      (find-file f)
+      (raise-frame)
+      (select-frame-set-input-focus (selected-frame)))))
+```
+
+To verify your config, run the following command,
+
+```shell
+emacsclient -c 'org-protocol://find-file?path=/tmp/some_file.txt'
+```
+
+it should open a new frame that visits `/tmp/some_file.txt`.
+
+(Yes, you could have shortcut the protocol thing, but org-protocol is popular and widely supported, so why not? :-)
+
+## Development
 
 - `npm install && npm run build` in terminal to install dependencies.
 - `Load unpacked plugin` in Logseq Desktop client.
+
+## Credits
+
+This plugin is a fork of [open-in-code](https://github.com/rebornix/logseq-open-in-code).
