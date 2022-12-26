@@ -28,14 +28,14 @@ function generateUrl(path) {
     return url;
 }
 
-async function openConfig(name) {
+export async function openConfig(name) {
   const graph = await logseq.App.getCurrentGraph();
   window.open(
     generateUrl(graph.url.replace("logseq_local_", "") + "/logseq/" + name)
   );
 }
 
-async function openGraph() {
+export async function openGraph() {
   const graph = await logseq.App.getCurrentGraph();
   window.open(generateUrl(graph.url.replace("logseq_local_", "")));
 }
@@ -62,7 +62,7 @@ async function findFile(fileId) {
   }
 }
 
-async function openPageInEmacs() {
+export async function openPageInEmacs() {
   const currentPage = await logseq.Editor.getCurrentPage();
   if (currentPage && currentPage.file) {
     const fileId = currentPage.file.id;

@@ -1,7 +1,33 @@
 import '@logseq/libs'
 import { createApp } from 'vue'
 import App from './App.vue'
+import { openPageInEmacs, openConfig } from './App.vue'
 import './index.css'
+
+const settings = [
+  {
+    key: "KeyboardShortcut_Page",
+    title: "Keyboard shortcut to edit the current page in Emacs",
+    description: "The keyboard shortcut to open the current page in Emacs (default: mod+o).",
+    type: "string",
+    default: "mod+o"
+  },
+  // {
+  //   key: "KeyboardShortcut_CustomCSS",
+  //   title: "Keyboard shortcut to edit custom.css in Emacs",
+  //   description: "The keyboard shortcut to edit custom.css in Emacs (default: NA).  NA means disabled.",
+  //   type: "string",
+  //   default: "NA"
+  // },
+  // {
+  //   key: "KeyboardShortcut_ConfigEDN",
+  //   title: "Keyboard shortcut to edit config.edn in Emacs",
+  //   description: "The keyboard shortcut to edit config.edn in Emacs (default: NA).  NA means disabled.",
+  //   type: "string",
+  //   default: "NA"
+  // }
+]
+logseq.useSettingsSchema(settings);
 
 /**
  * user model
@@ -24,7 +50,7 @@ function main() {
   })
 
   const key = logseq.baseInfo.id
-  console.log(key);
+  // console.log(key);
 
   logseq.provideStyle(`
   div[data-injected-ui=open-in-emacs-${key}] {
@@ -58,6 +84,40 @@ function main() {
       </a>
     `,
   })
+
+  // create command palette
+  logseq.App.registerCommandPalette({
+    key: `open-in-emacs-page`,
+    label: "Edit this page in Emacs",
+    keybinding: {
+      binding: logseq.settings.KeyboardShortcut_Page,
+      mode: "global",
+    }
+  }, async () => {
+    await openPageInEmacs();
+  });
+
+  logseq.App.registerCommandPalette({
+    key: `open-in-emacs-custom-css`,
+    label: "Edit custom.css in Emacs",
+    // keybinding: {
+    //   binding: logseq.settings.KeyboardShortcut_CustomCSS,
+    //   mode: "global",
+    // }
+  }, async () => {
+    await openConfig("custom.css");
+  });
+
+  logseq.App.registerCommandPalette({
+    key: `open-in-emacs-config-edn`,
+    label: "Edit config.edn in Emacs",
+    // keybinding: {
+    //   binding: logseq.settings.KeyboardShortcut_ConfigEDN,
+    //   mode: "global",
+    // }
+  }, async () => {
+    await openConfig("config.edn");
+  });
 
   // main UI
   createApp(App).mount('#app')

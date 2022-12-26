@@ -4,6 +4,12 @@ Open and edit Logseq pages and config files in Emacs.
 
 ![Demo](demo.gif)
 
+## NEWS
+
+* v0.0.2
+  - Command Palette support. Try `mod+shift+p`.
+  - Add a keyboard shortcut to edit the current page (default `mod+o`).
+
 ## Configuration
 
 First, [set up Org-protocol](https://orgmode.org/worg/org-contrib/org-protocol.html).  This is due to the limitations of Logseq and, in general, Electron.
