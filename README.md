@@ -6,6 +6,8 @@ Open and edit Logseq pages and config files in Emacs.
 
 ## NEWS
 
+* v0.0.3
+  - Update to be compatible with Logseq v0.9.1.  **IMPORTANT**: If you are using older versions (prior to v0.9.1) and experience experience issues, please downgrade to 0.0.2 manually.
 * v0.0.2
   - Command Palette support. Try `mod+shift+p`.
   - Add a keyboard shortcut to edit the current page (default `mod+o`).

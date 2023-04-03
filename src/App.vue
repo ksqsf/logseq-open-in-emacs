@@ -31,13 +31,13 @@ function generateUrl(path) {
 export async function openConfig(name) {
   const graph = await logseq.App.getCurrentGraph();
   window.open(
-    generateUrl(graph.url.replace("logseq_local_", "") + "/logseq/" + name)
+    generateUrl(graph.path + "/logseq/" + name)
   );
 }
 
 export async function openGraph() {
   const graph = await logseq.App.getCurrentGraph();
-  window.open(generateUrl(graph.url.replace("logseq_local_", "")));
+  window.open(generateUrl(graph.path));
 }
 
 async function getAnsetorPageOfCurrentBlock() {
@@ -56,6 +56,14 @@ async function findFile(fileId) {
 
   if (matches && matches.length > 0) {
     const file = matches[0][0];
+    if (file.startsWith("/") || file.match(/[A-Z]:(\\|\/)/)) {
+      // file is an absolute path; for compatibility with older versions
+      return file;
+    } else {
+      // file is a relative path; since logseq v0.9.1
+      const graph = await logseq.App.getCurrentGraph();
+      return graph.path + "/" + file;
+    }
     return file;
   } else {
     return null;
