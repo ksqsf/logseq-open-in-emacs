@@ -7,7 +7,7 @@ Open and edit Logseq pages and config files in Emacs.
 ## NEWS
 
 * v0.0.3
-  - Update to be compatible with Logseq v0.9.1.  **IMPORTANT**: If you are using older versions (prior to v0.9.1) and experience experience issues, please downgrade to 0.0.2 manually.
+  - Update to be compatible with Logseq v0.9.1.  **IMPORTANT**: If you are using older versions (prior to v0.9.1) and experience compatibility issues, please downgrade to 0.0.2 manually.
 * v0.0.2
   - Command Palette support. Try `mod+shift+p`.
   - Add a keyboard shortcut to edit the current page (default `mod+o`).
@@ -44,13 +44,20 @@ Second, add the following to your config file:
       (select-frame-set-input-focus (selected-frame)))))
 ```
 
-To verify your config, run the following command,
+To verify your config, run the following commands,
 
 ```shell
+# To confirm that your Emacs config is correct:
 emacsclient -c 'org-protocol://find-file?path=/tmp/some_file.txt'
+
+# To confirm that org-protocol has been registered with your system,
+# if on Linux:
+xdg-open 'org-protocol://find-file?path=/tmp/some_file.txt'
+# if on macOS
+open 'org-protocol://find-file?path=/tmp/some_file.txt'
 ```
 
-it should open a new frame that visits `/tmp/some_file.txt`.
+they all should open a new Emacs frame that visits `/tmp/some_file.txt`.
 
 (Yes, you could have shortcut the protocol thing, but org-protocol is popular and widely supported, so why not? :-)
 
