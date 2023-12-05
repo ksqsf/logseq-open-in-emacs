@@ -22,9 +22,12 @@
 </template>
 
 <script>
-function generateUrl(path) {
+function generateUrl(path, anchor = null) {
     let url = `org-protocol://find-file/?path=` + encodeURIComponent(path);
-    // console.log(url);
+    if (anchor && anchor != "") {
+        url = url + `&anchor=` + encodeURIComponent(anchor);
+    }
+    //console.log('logseq-open-in-emacs: ' + url);
     return url;
 }
 
@@ -75,13 +78,17 @@ export async function openPageInEmacs() {
     if (currentPage && currentPage.file) {
         const fileId = currentPage.file.id;
         const file = await findFile(fileId);
-        
         if (file) {
-            window.open(generateUrl(file));
+            let anchor = null; // Add anchor if possible
+            const currentBlock = await logseq.Editor.getCurrentBlock();
+            if (currentBlock && currentPage.id == currentBlock?.page.id) {
+                anchor = currentBlock.content.substring(0, 100).split("\n")[0];
+            }
+            window.open(generateUrl(file, anchor));
             return;
         }
     }
-    
+
     const ansetor = await getAnsetorPageOfCurrentBlock();
     if (ansetor) {
         const page = await logseq.Editor.getPage(ansetor.id);
@@ -89,7 +96,12 @@ export async function openPageInEmacs() {
             const fileId = page.file.id;
             const file = await findFile(fileId);
             if (file) {
-                window.open(generateUrl(file));
+                let anchor = null; // Add anchor if possible
+                const currentBlock = await logseq.Editor.getCurrentBlock();
+                if (currentBlock) {
+                    anchor = currentBlock.content.substring(0, 100).split("\n")[0];
+                }
+                window.open(generateUrl(file, anchor));
                 return;
             }
         }

@@ -6,6 +6,10 @@ Open and edit Logseq pages and config files in Emacs.
 
 ## NEWS
 
+* v0.0.4
+  - New: "Open Current Page" will now try to jump to the physical position of the current block. This requires Emacs config update (see the new sample config).
+    + Caution: The position can be wrong! This feature is implemented by sending a piece of block contents, and then Emacs does a full text search.
+    + Disable this feature by removing the search from the Emacs-side config.
 * v0.0.3
   - Update to be compatible with Logseq v0.9.1.  **IMPORTANT**: If you are using older versions (prior to v0.9.1) and experience compatibility issues, please downgrade to 0.0.2 manually.
 * v0.0.2
@@ -16,7 +20,7 @@ Open and edit Logseq pages and config files in Emacs.
 
 First, [set up Org-protocol](https://orgmode.org/worg/org-contrib/org-protocol.html).  This is due to the limitations of Logseq and, in general, Electron.
 
-Second, add the following to your config file:
+Second, add the following sample config to your Emacs config file:
 
 ```lisp
 (use-package org-protocol
@@ -38,10 +42,18 @@ Second, add the following to your config file:
 
   (defun org-protocol-find-file (fname)
     "Process org-protocol://find-file?path= style URL."
-    (let ((f (plist-get (org-protocol-parse-parameters fname nil '(:path)) :path)))
+    (let* ((parsed (org-protocol-parse-parameters fname nil '(:path :anchor)))
+           (f (plist-get parsed :path))
+           (anchor (plist-get parsed :anchor))
+           (anchor-re (and anchor (concat "\\(-\\|\\*\\) " (regexp-quote anchor)))))
       (find-file (org-protocol-find-file-fix-wsl-path f))
       (raise-frame)
-      (select-frame-set-input-focus (selected-frame)))))
+      (select-frame-set-input-focus (selected-frame))
+      (unhighlight-regexp t)
+      (highlight-regexp anchor-re)
+      (when anchor
+        (or (re-search-forward anchor-re nil t 1)
+            (re-search-backward anchor-re nil t 1))))))
 ```
 
 To verify your config, run the following commands,
